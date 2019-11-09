@@ -6,6 +6,7 @@
 template<class T> struct BST
 {
 	BST<T>();
+	~BST<T>();
 	BSTnode<T> *rt;
 	int size();
 	int height();
@@ -18,6 +19,7 @@ template<class T> struct BST
 	int rnk(BSTnode<T>* k, T v);
 	T pre(BSTnode<T>* k, T v);
 	T suc(BSTnode<T>* k, T v);
+	void clearTree(BSTnode<T>* &k);
 	void insert(T v);
 	void remove(T v);
 	bool find(T v);
@@ -26,6 +28,7 @@ template<class T> struct BST
 	int getRank(T v);
 	T prev(T v);
 	T succ(T v);
+	void clear();
 	void dfs(BSTnode<T>* k);
 	void printTree();
 };
@@ -33,6 +36,11 @@ template<class T> struct BST
 template<class T> BST<T>::BST()
 {
 	rt = nullptr;
+}
+
+template<class T> BST<T>::~BST()
+{
+	clear();
 }
 
 template<class T> int BST<T>::size()
@@ -141,6 +149,19 @@ template<class T> T BST<T>::suc(BSTnode<T>* k, T v)
 	return ret;
 }
 
+template<class T> void BST<T>::clearTree(BSTnode<T>* &k)
+{
+	if (k == nullptr) return;
+	if (k->ch[0] == nullptr && k->ch[1] == nullptr)
+	{
+		delete k;
+		k = nullptr;
+		return;
+	}
+	if (k->ch[0] != nullptr) clearTree(k->ch[0]);
+	if (k->ch[1] != nullptr) clearTree(k->ch[1]);
+}
+
 template<class T> void BST<T>::insert(T v)
 {
 	insertNode(rt, v);
@@ -187,6 +208,16 @@ template<class T> T BST<T>::prev(T v)
 template<class T> T BST<T>::succ(T v)
 {
 	return suc(rt, v);
+}
+
+template<class T> void BST<T>::clear()
+{
+	clearTree(rt);
+	if (rt != nullptr)
+	{
+		delete rt;
+		rt = nullptr;
+	}
 }
 
 template<class T> void BST<T>::dfs(BSTnode<T>* k)

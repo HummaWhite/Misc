@@ -7,21 +7,30 @@ template<class T> struct AVL:
 	BST<T>
 {
 	AVL();
+	AVL(int bf);
 	void rebalanceNode(BSTnode<T>* &k);
 	void removeNode(BSTnode<T>* &k, T v);
+	int maxBF;
 };
 
 template<class T> AVL<T>::AVL():
 	BST<T>()
 {
+	maxBF = 1;
+}
+
+template<class T> AVL<T>::AVL(int bf):
+	BST<T>()
+{
+	maxBF = bf;
 }
 
 template<class T> void AVL<T>::rebalanceNode(BSTnode<T>* &k)
 {
 	int lh = _h(k->ch[0]);
 	int rh = _h(k->ch[1]);
-	if (lh + 1 < rh) this->rotate(k, LEFT);
-	if (rh + 1 < lh) this->rotate(k, RIGHT);
+	if (lh + maxBF < rh) this->rotate(k, LEFT);
+	if (rh + maxBF < lh) this->rotate(k, RIGHT);
 }
 
 template<class T> void AVL<T>::removeNode(BSTnode<T>* &k, T v)
